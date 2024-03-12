@@ -1,0 +1,17 @@
+apiVersion: skaffold/v4beta9
+kind: Config
+manifests:
+  rawYaml:
+    - ./infra/k8s/* #collection of different config files for kubernetes in this directory
+build:
+  local:
+    push: false #Not required to push to dockerhub with any change
+  artifacts: #Some pod that is running code in this directory
+    - image: mattxtype1/auth
+      context: auth
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual: # two reasons to update our pod with changes
+          - src: "src/**/*.js" # first is if we make a change to a javascript file it will copy into pod, Any other changes will cause a rebuild of the image and update deployment
+            dest: .
