@@ -12,8 +12,6 @@ router.post("/api/auth/signup", async (req: Request, res: Response) => {
   const user = User.build({email, password});
   await user.save();
 
-  console.log(User.find());
-
   res.status(201).send({ email, password });
 });
 
