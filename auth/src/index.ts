@@ -2,7 +2,6 @@ import express from "express";
 import mongoose from "mongoose";
 import { json } from "body-parser";
 import { signupRouter } from "./routes/signup";
-import { connect } from 'nats';
 import { natsWrapper } from "./nats-wrapper";
 
 const app = express();
