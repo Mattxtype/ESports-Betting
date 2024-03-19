@@ -1,13 +1,6 @@
-import express from "express";
 import mongoose from "mongoose";
-import { json } from "body-parser";
-import { signupRouter } from "./routes/signup";
+import { app } from "./app";
 import { natsWrapper } from "./nats-wrapper";
-
-const app = express();
-app.use(json());
-
-app.use(signupRouter);
 
 const start = async () => {
   try {
