@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-stats-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-stats
+  template:
+    metadata:
+      labels:
+        app: user-stats
+    spec:
+      containers:
+        - name: user-stats
+          image: mattxtype1/user-stats
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-stats-srv
+spec:
+  selector:
+    app: user-stats
+  ports:
+  - name: user-stats
+    protocol: TCP
+    port: 3001
+    targetPort: 3001

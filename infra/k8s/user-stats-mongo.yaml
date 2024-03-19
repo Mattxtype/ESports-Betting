@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-stats-mongo-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-stats-mongo
+  template:
+    metadata:
+      labels:
+        app: user-stats-mongo
+    spec:
+      containers:
+        - name: user-stats-mongo
+          image: mongo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-stats-mongo-srv
+spec:
+  selector:
+    app: user-stats-mongo
+  ports:
+  - name: db
+    protocol: TCP
+    port: 27017 #MongoDB listens on this port by default
+    targetPort: 27017
