@@ -41,7 +41,7 @@ router.post(
       jwt: userJwt
     };
 
-    res.status(201).send({ email, password });
+    res.status(201).send(user);
   }
 );
 
