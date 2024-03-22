@@ -1,10 +1,12 @@
 import express, { Request, Response, json } from "express";
-import { body, validationResult } from "express-validator";
+import { body } from "express-validator";
 import jwt from "jsonwebtoken";
 import { JSONCodec } from "nats";
 
 import { User } from "../models/user";
 import { natsWrapper } from "../nats-wrapper";
+
+import { validateRequest } from '@mkrbetting/common';
 
 const router = express.Router();
 

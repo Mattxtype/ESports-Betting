@@ -4,43 +4,51 @@ import { User } from "../models/user";
 import { Password } from "../services/password";
 import jwt from "jsonwebtoken";
 
+import { validateRequest } from "@mkrbetting/common";
+
 const router = express.Router();
 
-router.post("/api/auth/signin",[
-    body('email')
-    .isEmail()
-    .withMessage('Email must be valid'),
-    body('password')
-    .trim()
-    .notEmpty()
-    .withMessage('You must supply a password')
-],
-validateRequest, 
-async (req: Request, res: Response) => {
+router.post(
+  "/api/auth/signin",
+  [
+    body("email").isEmail().withMessage("Email must be valid"),
+    body("password")
+      .trim()
+      .notEmpty()
+      .withMessage("You must supply a password"),
+  ],
+  validateRequest,
+  async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
-    const existingUser = await User.findOne({email});
-    if(!existingUser) {
-        throw new Error("Login request failed");
-    } 
-    const passwordMatch = await Password.compare(existingUser.password, password);
+    const existingUser = await User.findOne({ email });
+    if (!existingUser) {
+      throw new Error("Login request failed");
+    }
+    const passwordMatch = await Password.compare(
+      existingUser.password,
+      password
+    );
     if (!passwordMatch) {
-        throw new Error("invalid credentials");
+      throw new Error("invalid credentials");
     }
 
-     //generate jwt
-     const userJwt = jwt.sign({
+    //generate jwt
+    const userJwt = jwt.sign(
+      {
         id: existingUser.id,
-        email: existingUser.email
-      }, 
-      process.env.JWT_KEY!);
-  
-      //store it on session object
-      req.session = {
-        jwt: userJwt
-      };
+        email: existingUser.email,
+      },
+      process.env.JWT_KEY!
+    );
 
-      res.status(200).send(existingUser);
-});
+    //store it on session object
+    req.session = {
+      jwt: userJwt,
+    };
+
+    res.status(200).send(existingUser);
+  }
+);
 
 export { router as signinRouter };

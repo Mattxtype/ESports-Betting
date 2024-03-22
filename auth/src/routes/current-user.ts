@@ -1,5 +1,5 @@
 import express from "express";
-import jwt from "jsonwebtoken";
+import { currentUser, requireAuth } from '@mkrbetting/common'
 const router = express.Router();
 
 router.get("/api/auth/currentuser", currentUser, requireAuth, (req, res) => {
