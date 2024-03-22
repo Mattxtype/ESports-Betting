@@ -1,9 +1,11 @@
-import express, { Request, Response } from "express";
+import express, { Request, Response, json } from "express";
 import { body, validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
+import { JSONCodec } from "nats";
 
 import { User } from "../models/user";
 import { validateRequest } from "../middleware/validate-request";
+import { natsWrapper } from "../nats-wrapper";
 
 const router = express.Router();
 
@@ -21,25 +23,32 @@ router.post(
     const { email, password } = req.body;
 
     //check if user is existing
-    const existingUser = await User.findOne({email})
+    const existingUser = await User.findOne({ email });
 
-    if(existingUser) {
+    if (existingUser) {
       throw new Error("email is already in use");
     }
 
     const user = User.build({ email, password });
     await user.save();
 
+    // create a codec
+    const jc = JSONCodec();
+    //send encoded message to nats as event
+    natsWrapper.client.publish("new_user_event", jc.encode(user));
+
     //generate jwt
-    const userJwt = jwt.sign({
-      id: user.id,
-      email: user.email
-    }, 
-    process.env.JWT_KEY!);
+    const userJwt = jwt.sign(
+      {
+        id: user.id,
+        email: user.email,
+      },
+      process.env.JWT_KEY!
+    );
 
     //store it on session object
     req.session = {
-      jwt: userJwt
+      jwt: userJwt,
     };
 
     res.status(201).send(user);
