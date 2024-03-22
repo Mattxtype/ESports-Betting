@@ -4,6 +4,7 @@ import { signupRouter } from "./routes/signup";
 import cookieSession from "cookie-session";
 import { signinRouter } from "./routes/signin";
 import { currentUserRouter } from "./routes/current-user";
+import { signoutRouter } from "./routes/signout";
 
 const app = express();
 app.set("trust proxy", true); //needed to ensure that express is aware that nginx is proxying our traffic and trusts the https connection
@@ -16,5 +17,6 @@ app.use(cookieSession({
 app.use(signupRouter);
 app.use(signinRouter);
 app.use(currentUserRouter);
+app.use(signoutRouter);
 
 export { app };
