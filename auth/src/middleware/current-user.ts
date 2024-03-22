@@ -1,3 +1,4 @@
+/* MiddleWare to extract JWT payload and set it on req.currentUser */
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
