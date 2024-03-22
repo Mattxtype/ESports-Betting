@@ -20,7 +20,13 @@ router.post(
   async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
-    //(TODO) check if email is already registered
+    //check if user is existing
+    const existingUser = await User.find({email: email})
+
+    if(existingUser) {
+      throw new Error("email is already in use");
+    }
+
     const user = User.build({ email, password });
     await user.save();
 
