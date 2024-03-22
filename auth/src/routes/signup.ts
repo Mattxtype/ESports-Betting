@@ -4,7 +4,6 @@ import jwt from "jsonwebtoken";
 import { JSONCodec } from "nats";
 
 import { User } from "../models/user";
-import { validateRequest } from "../middleware/validate-request";
 import { natsWrapper } from "../nats-wrapper";
 
 const router = express.Router();
