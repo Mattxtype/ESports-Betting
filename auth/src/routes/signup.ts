@@ -21,7 +21,7 @@ router.post(
     const { email, password } = req.body;
 
     //check if user is existing
-    const existingUser = await User.find({email: email})
+    const existingUser = await User.findOne({email})
 
     if(existingUser) {
       throw new Error("email is already in use");
