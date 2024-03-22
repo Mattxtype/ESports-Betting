@@ -13,7 +13,7 @@ const start = async () => {
     console.log(err);
   }
 
-  app.listen(3000, () => {
+  app.listen(3001, () => {
     console.log("listening on port 3001");
   });
 };
