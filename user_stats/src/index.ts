@@ -1,6 +1,8 @@
 import express from "express";
 import mongoose from "mongoose";
 import { json } from "body-parser";
+import { natsWrapper } from "../nats-wrapper";
+import { newUserEvent } from "./events/new_user_subscribe";
 
 const app = express();
 app.use(json());
@@ -12,6 +14,10 @@ const start = async () => {
   } catch (err) {
     console.log(err);
   }
+
+  await natsWrapper.newConnection("nats://nats:4222")
+
+  await newUserEvent();
 
   app.listen(3001, () => {
     console.log("listening on port 3001");
