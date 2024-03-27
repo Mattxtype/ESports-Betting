@@ -3,9 +3,13 @@ import mongoose from "mongoose";
 import { json } from "body-parser";
 import { natsWrapper } from "../nats-wrapper";
 import { newUserEvent } from "./events/new_user_subscribe";
+import { joinTourneyRouter } from "./routes/join-tourney";
 
 const app = express();
+app.set("trust proxy", true); //needed to ensure that express is aware that nginx is proxying our traffic and trusts the https connection
 app.use(json());
+
+app.use(joinTourneyRouter);
 
 const start = async () => {
   try {

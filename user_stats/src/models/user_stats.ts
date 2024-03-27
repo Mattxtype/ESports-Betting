@@ -38,20 +38,28 @@ const userStatsSchema = new mongoose.Schema(
         },
       ],
       require: false,
-    }
+    },
   },
   {
     toObject: {
-    transform(doc, ret) {
+      transform(doc, ret) {
         ret.id = ret._id;
         delete ret._id;
         delete ret.password;
-     },
+      },
 
-  //Alternatively can delete __v in above transform method
-  versionKey: false,
+      //Alternatively can delete __v in above transform method
+      versionKey: false,
     },
     toJSON: {
+      transform(doc, ret) {
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret.password;
+      },
+
+      //Alternatively can delete __v in above transform method
+      versionKey: false,
     },
   }
 );
