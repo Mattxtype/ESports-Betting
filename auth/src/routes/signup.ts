@@ -6,7 +6,7 @@ import { JSONCodec } from "nats";
 import { User } from "../models/user";
 import { natsWrapper } from "../nats-wrapper";
 
-import { validateRequest } from '@mkrbetting/common';
+import { validateRequest, BadRequestError } from '@mkrbetting/common';
 
 const router = express.Router();
 
@@ -27,7 +27,7 @@ router.post(
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
-      throw new Error("email is already in use");
+      throw new BadRequestError("email is already in use");
     }
 
     const user = User.build({ email, password });
