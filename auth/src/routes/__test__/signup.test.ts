@@ -10,3 +10,5 @@ it('returns a 201 on success signup', async () => {
         })
         .expect(201);
 });
+
+it('returns ')
