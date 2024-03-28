@@ -5,6 +5,7 @@ import { natsWrapper } from "../nats-wrapper";
 import { newUserEvent } from "./events/new_user_subscribe";
 import { joinTourneyRouter } from "./routes/join-tourney";
 import { getUserTourneyListRouter } from "./routes/get-user-tourney-list";
+import { removeTourneyRouter } from "./routes/remove-tourney";
 
 const app = express();
 app.set("trust proxy", true); //needed to ensure that express is aware that nginx is proxying our traffic and trusts the https connection
@@ -12,6 +13,7 @@ app.use(json());
 
 app.use(joinTourneyRouter);
 app.use(getUserTourneyListRouter);
+app.use(removeTourneyRouter);
 
 const start = async () => {
   try {
