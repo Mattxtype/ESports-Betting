@@ -4,7 +4,7 @@ import { User } from "../models/user";
 import { Password } from "../services/password";
 import jwt from "jsonwebtoken";
 
-import { validateRequest } from "@mkrbetting/common";
+import { BadRequestError, NotAuthorizedError, validateRequest } from "@mkrbetting/common";
 
 const router = express.Router();
 
@@ -23,14 +23,14 @@ router.post(
 
     const existingUser = await User.findOne({ email });
     if (!existingUser) {
-      throw new Error("Login request failed");
+      throw new BadRequestError("Login request failed: User already exists");
     }
     const passwordMatch = await Password.compare(
       existingUser.password,
       password
     );
     if (!passwordMatch) {
-      throw new Error("invalid credentials");
+      throw new BadRequestError("Invalid Credentials");
     }
 
     //generate jwt
