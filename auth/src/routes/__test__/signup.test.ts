@@ -1,10 +1,7 @@
 import request from 'supertest';
 import { app } from '../../app';
-import { natsWrapper } from '../../nats-wrapper';
 
 const PATH = "/api/auth/signup"
-
-jest.fn(natsWrapper.client.publish);
 
 it('returns a 201 on success signup', async () => {
     return request(app)
@@ -15,6 +12,26 @@ it('returns a 201 on success signup', async () => {
         })
         .expect(201);
 });
+
+it('returns 400 on invalid email', async () => {
+    return request(app)
+        .post('/api/auth/signup')
+        .send({
+            email: "bademail.com",
+            password: "goodPassword"
+        })
+        .expect(400);
+})
+
+it('return 400 on invalid password', async() => {
+    return request(app)
+        .post('/api/auth/signup')
+        .send({
+            email: "bademail.com",
+            password: "bad"
+        })
+        .expect(400);
+})
 
 it('disallows duplicate emails', async () => {
     await request(app)
