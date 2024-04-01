@@ -24,3 +24,10 @@ spec:
                 name: user-stats-srv
                 port:
                   number: 3001
+          - path: /?(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: client-srv
+                port:
+                  number: 3000

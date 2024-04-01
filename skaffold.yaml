@@ -23,3 +23,11 @@ build:
         manual: # two reasons to update our pod with changes
           - src: "src/**/*.js" # first is if we make a change to a javascript file it will copy into pod, Any other changes will cause a rebuild of the image and update deployment
             dest: .
+    - image: mattxtype1/codleague-client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '**/*.js'
+            dest: .
