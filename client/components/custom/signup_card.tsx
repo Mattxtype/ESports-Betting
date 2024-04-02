@@ -1,11 +1,22 @@
 'use client';
 import React, { FormEvent } from "react";
+import axios from 'axios';
 
-function onSubmit (event: FormEvent<HTMLFormElement>) {
+async function onSubmit (event: FormEvent<HTMLFormElement>) {
   event.preventDefault();
   var formData = new FormData(event.currentTarget);
   const form_values = Object.fromEntries(formData);
   console.log('form values', form_values)
+  await axios.post('/api/auth/signup', {
+    email: form_values.email,
+    password: form_values.password
+  })
+  .then(function (response) {
+    console.log(response);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
 }
 
 const SignupCard = () => {
