@@ -1,6 +1,8 @@
 'use client';
 import React, { FormEvent } from "react";
 import axios from 'axios';
+import { NavBar } from "@/components/navbar/navbar";
+import Link from "next/link";
 
 async function onSubmit (event: FormEvent<HTMLFormElement>) {
   event.preventDefault();
@@ -19,18 +21,11 @@ async function onSubmit (event: FormEvent<HTMLFormElement>) {
   });
 }
 
-const SignupCard = () => {
+export default function SignupCard() {
   return (
     <>
-      {/*
-        This example requires updating your template:
-
-        ```
-        <html class="h-full bg-white">
-        <body class="h-full">
-        ```
-      */}
-      <div className="flex max-w-sm rounded shadow-lg flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+      <NavBar></NavBar>
+      <div className="flex flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
             className="mx-auto h-10 w-auto"
@@ -38,7 +33,7 @@ const SignupCard = () => {
             alt="Your Company"
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Sign up!
+            Register
           </h2>
         </div>
 
@@ -83,14 +78,16 @@ const SignupCard = () => {
                 type="submit"
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
-                Sign up
+                Create Account
               </button>
             </div>
           </form>
+          <div>
+            <span className="mr-4">Already have an account?</span>
+            <Link href={"/auth/signin"} className="text-blue-600">Sign in</Link>
+          </div>
         </div>
       </div>
     </>
   )
 }
-
-export {SignupCard};
