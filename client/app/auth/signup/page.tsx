@@ -1,27 +1,32 @@
-'use client';
-import React, { FormEvent } from "react";
-import axios from 'axios';
+"use client";
+import React, { FormEvent, useReducer, useState } from "react";
 import { NavBar } from "@/components/navbar/navbar";
 import Link from "next/link";
+import { SignUpForm } from "@/app/forms/signup_form";
+import { redirect } from "next/navigation";
 
-async function onSubmit (event: FormEvent<HTMLFormElement>) {
-  event.preventDefault();
-  var formData = new FormData(event.currentTarget);
-  const form_values = Object.fromEntries(formData);
-  console.log('form values', form_values)
-  await axios.post('/api/auth/signup', {
-    email: form_values.email,
-    password: form_values.password
-  })
-  .then(function (response) {
-    console.log(response);
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
+export enum signupStates {
+  NOT_SIGNED_UP,
+  SIGNING_UP,
+  SIGNED_UP,
 }
 
 export default function SignupCard() {
+ const[signupState, setSignupState] = useState(signupStates.NOT_SIGNED_UP);
+
+ const userSignsUpCallback = (state: signupStates) => {
+    setSignupState(state);
+};
+
+var formDisplay = <SignUpForm onClick={userSignsUpCallback}></SignUpForm>
+
+if(signupState === signupStates.SIGNING_UP){
+    formDisplay = <span className="text-center text-lg font-semibold">signing up...</span>;
+}
+if(signupState === signupStates.SIGNED_UP){
+    formDisplay = <div className="text-center text-lg font-semibold"><span>Sucessfully signed up! </span><Link href='/' className="text-blue-600">Continue</Link></div>
+}
+
   return (
     <>
       <NavBar></NavBar>
@@ -38,56 +43,9 @@ export default function SignupCard() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" onSubmit={onSubmit}>
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-                Email address
-              </label>
-              <div className="mt-2">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-
-            <div>
-              <div className="flex items-center justify-between">
-                <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
-                  Password
-                </label>
-              </div>
-              <div className="mt-2">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-
-            <div>
-              <button
-                type="submit"
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
-                Create Account
-              </button>
-            </div>
-          </form>
-          <div>
-            <span className="mr-4">Already have an account?</span>
-            <Link href={"/auth/signin"} className="text-blue-600">Sign in</Link>
-          </div>
+          {formDisplay}
         </div>
       </div>
     </>
-  )
+  );
 }
